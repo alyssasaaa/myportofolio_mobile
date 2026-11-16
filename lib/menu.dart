@@ -8,9 +8,12 @@ class MyHomePage extends StatelessWidget {
   final String kelas = "PBP KI";
 
   final List<ItemHomepage> items = [
-    ItemHomepage("View Projects", Icons.folder),
-    ItemHomepage("Add Project", Icons.add_circle),
-    ItemHomepage("Logout", Icons.logout),
+    ItemHomepage("View Experiences", Icons.emoji_people_rounded, Colors.red.shade400),
+    ItemHomepage("View Competitions", Icons.computer_rounded, Colors.orange.shade600),
+    ItemHomepage("View Education", Icons.school, Colors.yellow.shade700),
+    ItemHomepage("Add Experiences", Icons.add_circle, Colors.lightGreen.shade400),
+    ItemHomepage("Add Competitions", Icons.add_circle, Colors.blue.shade400),
+    ItemHomepage("Logout", Icons.logout, Colors.deepPurpleAccent.shade200),
   ];
 
   @override
@@ -111,8 +114,9 @@ class InfoCard extends StatelessWidget {
 class ItemHomepage {
   final String name;
   final IconData icon;
+  final Color color;
 
-  ItemHomepage(this.name, this.icon);
+  ItemHomepage(this.name, this.icon, this.color);
 }
 
 class ItemCard extends StatelessWidget {
@@ -123,7 +127,7 @@ class ItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Theme.of(context).colorScheme.secondary,
+      color: item.color,
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
         onTap: () {
