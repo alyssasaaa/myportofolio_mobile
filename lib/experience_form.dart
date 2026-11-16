@@ -282,8 +282,23 @@ class _ExperienceFormPageState extends State<ExperienceFormPage> {
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              title: const Text(
-                                'Experience added successfully!',
+                              title: const Text('Experience added successfully!'),
+                              content: SingleChildScrollView(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Experience Title: $_title'),
+                                    Text('Description: $_description'),
+                                    Text('Category: ${_categories[_category]}'),
+                                    Text('Education Stage: ${_stages[_stage]}'),
+                                    Text(
+                                      'Thumbnail URL: ${_thumbnail.trim().isEmpty ? "Not provided" : _thumbnail}',
+                                    ),
+                                    Text(
+                                      'End Date: ${_endedAt == null ? "Ongoing" : _endedAt.toString().substring(0, 16)}',
+                                    ),
+                                  ],
+                                ),
                               ),
                               actions: [
                                 TextButton(
