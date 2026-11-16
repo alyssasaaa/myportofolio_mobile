@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myportofolio_mobile/experience_form.dart';
 import 'package:myportofolio_mobile/widgets/left_drawer.dart';
 
 class MyHomePage extends StatelessWidget {
@@ -139,6 +140,13 @@ class ItemCard extends StatelessWidget {
             ..showSnackBar(
               SnackBar(content: Text("You pressed the ${item.name} button!"))
             );
+          // Navigate to the experience form from its action card.
+          if (item.name == "Add Experiences") {
+            Navigator.push(
+              context, 
+              MaterialPageRoute(builder: (context) => const ExperienceFormPage()),
+            );
+          }
         },
         child: Container(
           padding: const EdgeInsets.all(8),
