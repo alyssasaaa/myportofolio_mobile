@@ -24,63 +24,52 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           'MyPortfolio',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
-        iconTheme: const IconThemeData(color: Colors.white)
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       drawer: const LeftDrawer(),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // Horizontal row showing 3 InfoCards.
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                InfoCard(title: 'NPM', content: npm),
-                InfoCard(title: 'Name', content: nama),
-                InfoCard(title: 'Class', content: kelas),
-              ],
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          Row(
+            children: [
+              Expanded(child: InfoCard(title: 'NPM', content: npm)),
+              Expanded(child: InfoCard(title: 'Name', content: nama)),
+              Expanded(child: InfoCard(title: 'Class', content: kelas)),
+            ],
+          ),
+          const Padding(
+            padding: EdgeInsets.only(top: 32, bottom: 20),
+            child: Text(
+              'Welcome to MyPortfolio Mobile!',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
-
-            const SizedBox(height: 16.0),
-
-            // Greeting and 3-column action grid.
-            Center(
-              child: Column(
+          ),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              const spacing = 10.0;
+              final columns = constraints.maxWidth >= 380 ? 3 : 2;
+              final width = (constraints.maxWidth - spacing * (columns - 1)) / columns;
+              return Wrap(
+                spacing: spacing,
+                runSpacing: spacing,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.only(top: 16.0),
-                    child: Text(
-                      'Welcome to MyPortfolio Mobile!',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
+                  for (final item in items)
+                    SizedBox(
+                      width: width,
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(minHeight: 104),
+                        child: ItemCard(item),
                       ),
                     ),
-                  ),
-
-                  GridView.count(
-                    primary: true,
-                    padding: const EdgeInsets.all(20),
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    crossAxisCount: 3,
-                    shrinkWrap: true,
-                    children: items.map((ItemHomepage item) {
-                      return ItemCard(item);
-                    }).toList(),
-                  ),
                 ],
-              ),
-            ),
-          ],
-        ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }
@@ -97,17 +86,13 @@ class InfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 2.0,
-      child: Container(
-        width: MediaQuery.of(context).size.width / 3.5,
-        padding: const EdgeInsets.all(16.0),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 16),
         child: Column(
           children: [
-            Text(
-              title,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
+            Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(height: 8.0),
-            Text(content),
+            Text(content, textAlign: TextAlign.center),
           ],
         ),
       ),
