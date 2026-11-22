@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myportofolio_mobile/screens/menu.dart';
 import 'package:myportofolio_mobile/screens/experience_form.dart';
+import 'package:myportofolio_mobile/screens/competition_form.dart';
 
 class ItemCard extends StatelessWidget {
   final ItemHomepage item;
@@ -24,6 +25,11 @@ class ItemCard extends StatelessWidget {
             Navigator.push(
               context, 
               MaterialPageRoute(builder: (context) => const ExperienceFormPage()),
+            );
+          } else if (item.name == "Add Competitions") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CompetitionFormPage()),
             );
           }
         },
