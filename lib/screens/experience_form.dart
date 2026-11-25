@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:myportofolio_mobile/widgets/left_drawer.dart';
 
+import 'package:provider/provider.dart';
+
+import '../models/experience.dart';
+import '../services/api_client.dart';
+import '../services/auth_state.dart';
+import '../widgets/auth_guard.dart';
+
 class ExperienceFormPage extends StatefulWidget {
   const ExperienceFormPage({super.key});
 
@@ -10,6 +17,62 @@ class ExperienceFormPage extends StatefulWidget {
 
 class _ExperienceFormPageState extends State<ExperienceFormPage> {
   final _formKey = GlobalKey<FormState>();
+
+  bool _saving = false;
+
+  Future<void> _submit() async {
+    if (_saving || !_formKey.currentState!.validate()) return;
+    setState(() => _saving = true);
+    try {
+      if (!await ensureLoggedIn(context) || !mounted) return;
+      final experience = Experience(
+        title: _title.trim(),
+        description: _description.trim(),
+        category: _category,
+        stage: _stage,
+        thumbnail: _thumbnail.trim(),
+        endedAt: _endedAt?.toUtc(),
+      );
+      final saved = await context.read<ApiClient>().createExperience(
+        experience,
+        context.read<AuthState>().token!,
+      );
+      if (!mounted) return;
+      await showDialog<void>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Experience added successfully!'),
+          content: Text(saved.title),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+      if (mounted) Navigator.pop(context);
+    } on ApiException catch (error) {
+      if (!mounted) return;
+      if (error.invalidToken) {
+        context.read<AuthState>().clear();
+        await ensureLoggedIn(context);
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(error.toString())));
+      }
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Could not save experience. Check your connection.'),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _saving = false);
+    }
+  }
 
   String _title = "";
   String _description = "";
@@ -276,58 +339,7 @@ class _ExperienceFormPageState extends State<ExperienceFormPage> {
                     style: ButtonStyle(
                       backgroundColor: WidgetStateProperty.all(Colors.indigo),
                     ),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text('Experience added successfully!'),
-                              content: SingleChildScrollView(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('Experience Title: $_title'),
-                                    Text('Description: $_description'),
-                                    Text('Category: ${_categories[_category]}'),
-                                    Text('Education Stage: ${_stages[_stage]}'),
-                                    Text(
-                                      'Thumbnail URL: ${_thumbnail.trim().isEmpty ? "Not provided" : _thumbnail}',
-                                    ),
-                                    Text(
-                                      'End Date: ${_endedAt == null ? "Ongoing" : _endedAt.toString().substring(0, 16)}',
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              actions: [
-                                TextButton(
-                                  child: const Text('OK'),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    setState(() {
-                                      _title = "";
-                                      _description = "";
-                                      _category = "full-time";
-                                      _stage = "university";
-                                      _thumbnail = "";
-                                      _endedAt = null;
-                                    });
-                                    // Rebuild the default initial values before resetting.
-                                    WidgetsBinding.instance
-                                        .addPostFrameCallback((_) {
-                                          if (mounted) {
-                                            _formKey.currentState!.reset();
-                                          }
-                                        });
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      }
-                    },
+                    onPressed: _saving ? null : _submit,
                     child: const Text(
                       "Save",
                       style: TextStyle(color: Colors.white),

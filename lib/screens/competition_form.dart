@@ -375,20 +375,32 @@ class _CompetitionFormPageState extends State<CompetitionFormPage> {
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              title: const Text('Competition added successfully!'),
+                              title: const Text(
+                                'Competition added successfully!',
+                              ),
                               content: SingleChildScrollView(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text('Competition Title: $_title'),
                                     Text('Organizer: $_organizer'),
-                                    Text('Competition Type: ${_competitionTypes[_competitionType]}'),
+                                    Text(
+                                      'Competition Type: ${_competitionTypes[_competitionType]}',
+                                    ),
                                     Text('Description: $_description'),
-                                    Text('Competition Date: ${_competitionDate.toString().substring(0, 10)}'),
+                                    Text(
+                                      'Competition Date: ${_competitionDate.toString().substring(0, 10)}',
+                                    ),
                                     Text('Achievement: $_achievement'),
-                                    Text('Participation Type: ${_participationTypes[_participationType]}'),
-                                    Text('Competition URL: ${_projectUrl.trim().isEmpty ? "Not provided" : _projectUrl}'),
-                                    Text('Competition Image URL: ${_projectImageUrl.trim().isEmpty ? "Not provided" : _projectImageUrl}'),
+                                    Text(
+                                      'Participation Type: ${_participationTypes[_participationType]}',
+                                    ),
+                                    Text(
+                                      'Competition URL: ${_projectUrl.trim().isEmpty ? "Not provided" : _projectUrl}',
+                                    ),
+                                    Text(
+                                      'Competition Image URL: ${_projectImageUrl.trim().isEmpty ? "Not provided" : _projectImageUrl}',
+                                    ),
                                   ],
                                 ),
                               ),
@@ -410,11 +422,12 @@ class _CompetitionFormPageState extends State<CompetitionFormPage> {
                                     });
 
                                     // Rebuild the default initial values before resetting.
-                                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                                      if (mounted) {
-                                        _formKey.currentState!.reset();
-                                      }
-                                    });
+                                    WidgetsBinding.instance
+                                        .addPostFrameCallback((_) {
+                                          if (mounted) {
+                                            _formKey.currentState!.reset();
+                                          }
+                                        });
                                   },
                                 ),
                               ],

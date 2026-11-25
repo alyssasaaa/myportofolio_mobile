@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:myportofolio_mobile/screens/menu.dart';
-import 'package:myportofolio_mobile/screens/experience_form.dart';
+
+import '../screens/experience_list.dart';
+import '../widgets/auth_guard.dart';
+import '../services/auth_state.dart';
+
+import 'package:provider/provider.dart';
+
 import 'package:myportofolio_mobile/screens/competition_form.dart';
+
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final loggedIn = context.watch<AuthState>().isLoggedIn;
+    final scaffold = Scaffold.of(context);
     return Drawer(
       child: ListView(
         children: [
@@ -27,16 +36,12 @@ class LeftDrawer extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  'Explore personal projects and experiences!',
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.white,
-                  ),
+                  'Explore personal competitions and experiences!',
+                  style: TextStyle(fontSize: 15, color: Colors.white),
                 ),
               ],
             ),
           ),
-          // TODO: Add the navigation entries
           ListTile(
             leading: const Icon(Icons.home_outlined),
             title: const Text('Home'),
@@ -44,23 +49,27 @@ class LeftDrawer extends StatelessWidget {
             onTap: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => MyHomePage(),
-                ),
+                MaterialPageRoute(builder: (context) => MyHomePage()),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.work_outline),
+            title: const Text('View Experiences'),
+            onTap: () {
+              scaffold.closeDrawer();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const ExperienceListPage()),
               );
             },
           ),
           ListTile(
             leading: const Icon(Icons.add_circle_outline),
             title: const Text('Add Experiences'),
-            // Navigate to the Add Experiences screen
             onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const ExperienceFormPage(),
-                ),
-              );
+              scaffold.closeDrawer();
+              openExperienceForm(scaffold.context);
             },
           ),
           ListTile(
@@ -73,6 +82,18 @@ class LeftDrawer extends StatelessWidget {
                   builder: (context) => const CompetitionFormPage(),
                 ),
               );
+            },
+          ),
+          ListTile(
+            leading: Icon(loggedIn ? Icons.logout : Icons.login),
+            title: Text(loggedIn ? 'Logout' : 'Login'),
+            onTap: () {
+              scaffold.closeDrawer();
+              if (loggedIn) {
+                logout(scaffold.context);
+              } else {
+                ensureLoggedIn(scaffold.context);
+              }
             },
           ),
         ],

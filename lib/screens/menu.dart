@@ -10,10 +10,22 @@ class MyHomePage extends StatelessWidget {
   final String kelas = "PBP KI";
 
   final List<ItemHomepage> items = [
-    ItemHomepage("View Experiences", Icons.emoji_people_rounded, Colors.red.shade400),
-    ItemHomepage("View Competitions", Icons.computer_rounded, Colors.orange.shade600),
+    ItemHomepage(
+      "View Experiences",
+      Icons.emoji_people_rounded,
+      Colors.red.shade400,
+    ),
+    ItemHomepage(
+      "View Competitions",
+      Icons.computer_rounded,
+      Colors.orange.shade600,
+    ),
     ItemHomepage("View Education", Icons.school, Colors.yellow.shade700),
-    ItemHomepage("Add Experiences", Icons.add_circle, Colors.lightGreen.shade400),
+    ItemHomepage(
+      "Add Experiences",
+      Icons.add_circle,
+      Colors.lightGreen.shade400,
+    ),
     ItemHomepage("Add Competitions", Icons.add_circle, Colors.blue.shade400),
     ItemHomepage("Logout", Icons.logout, Colors.deepPurpleAccent.shade200),
   ];
@@ -35,9 +47,15 @@ class MyHomePage extends StatelessWidget {
         children: [
           Row(
             children: [
-              Expanded(child: InfoCard(title: 'NPM', content: npm)),
-              Expanded(child: InfoCard(title: 'Name', content: nama)),
-              Expanded(child: InfoCard(title: 'Class', content: kelas)),
+              Expanded(
+                child: InfoCard(title: 'NPM', content: npm),
+              ),
+              Expanded(
+                child: InfoCard(title: 'Name', content: nama),
+              ),
+              Expanded(
+                child: InfoCard(title: 'Class', content: kelas),
+              ),
             ],
           ),
           const Padding(
@@ -52,7 +70,8 @@ class MyHomePage extends StatelessWidget {
             builder: (context, constraints) {
               const spacing = 10.0;
               final columns = constraints.maxWidth >= 380 ? 3 : 2;
-              final width = (constraints.maxWidth - spacing * (columns - 1)) / columns;
+              final width =
+                  (constraints.maxWidth - spacing * (columns - 1)) / columns;
               return Wrap(
                 spacing: spacing,
                 runSpacing: spacing,
